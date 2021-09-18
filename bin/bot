@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+require 'bundler'
+require 'optparse'
+
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('./Gemfile')
+Bundler.require(:default)
+
+Dotenv.load
+
+Dir[File.expand_path('src/*.rb')].sort.each { |file| require file }
+
+options = {
+  file: 'item_storage.db'
+}
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: bin/bot [options]
+Must specify at least 'keywords' or 'categories'. If both are specified, results will be merged."
+
+  opts.on '-t', '--token [TOKEN]', String, 'Required: Discord bot token'
+  opts.on '-c', '--categories [CATEGORY]', Array, 'Comma separated list of category IDs on Mercari (ie: /jp/category/703/ -> 703)'
+  opts.on '-k', '--keywords [KEYWORD]', Array, 'Comma separated list of keywords to search for items'
+  opts.on '-f', '--file [FILE]', String, "(Optional) set sqlite file (default: #{options[:file]})"
+end
+
+begin
+  optparse.parse!(into: options)
+
+  raise OptionParser::MissingArgument, 'token' if options[:token].nil?
+  raise OptionParser::MissingArgument, "either 'categories' or 'keywords' required" if options[:categories].nil? && options[:keywords].nil?
+rescue OptionParser::MissingArgument => e
+  warn e
+  warn optparse
+  exit
+end

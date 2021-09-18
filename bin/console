@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require 'bundler'
+
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('./Gemfile')
+Bundler.require(:default, :development)
+
+Dotenv.load
+
+Dir[File.expand_path('src/*.rb')].sort.each { |file| require file }
+
+pry
