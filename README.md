@@ -1,3 +1,7 @@
+> [!WARNING]  
+> This repository has been long outdated since Mercari has updated their frontend and the scraping code no longer works.
+> Instead, checkout [robherley/sendibot](https://github.com/robherley/sendibot) that support Mercari, Yahoo Auctions/Shopping and more!
+
 # mercari-bot
 
 Scrape [Mercari (JPN)](https://www.mercari.jp/) listing for specific keywords or
